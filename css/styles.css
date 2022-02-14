@@ -45,6 +45,11 @@ body{
     text-align: center;
 }
 
+.drag{
+    touch-action: none;
+  user-select: none;
+}
+
 .drag img{
     width: 40px;
     height: 40px;
