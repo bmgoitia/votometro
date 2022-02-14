@@ -150,23 +150,24 @@ body{
 
 /* MEDIA QUERIES */
 
-@media (min-width: 600px) {
-	
+@media (min-width: 700px) {
+
     body{
         background-image: url("../img/congreso_op.png");
     }
-    #vSent p{
-        
+
+    #vSent p{ 
         font-size: 2rem;
         font-weight: 900;
         
     }
 
     .partiesR p{
+        font-size: 1rem;
         font-weight: 900;
     }
 
-  #info{
+    #info{
         font-size: 1.2rem;
     }
 
