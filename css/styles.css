@@ -1,0 +1,140 @@
+
+body{
+    width: 100vw;
+    margin: 0 auto;
+    /* font-family: 'Roboto', sans-serif; */
+    font-family: 'Libre Franklin', sans-serif;
+    background-image: url("../img/congreso_op.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+
+}
+
+
+.container{
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.68);
+}
+
+.grid{
+    display: grid;
+}
+
+#parties{
+    padding-top: 12px;
+    border:1px solid rgb(167, 165, 165);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.73);
+    
+}
+
+.partiesR{
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.partiesR p{
+    font-weight: 900;
+}
+
+.part{
+    padding: 0 !important;
+    text-align: center;
+}
+
+.drag img{
+    width: 40px;
+    height: 40px;
+    cursor:move;
+}
+
+
+
+/* Voting data */
+
+#vSent{
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+}
+
+#vSent p{
+    margin: 10px 0;
+    font-size: 2rem;
+    font-weight: 900;
+    
+}
+
+
+/* Vote columns */
+
+#vColumns{
+    
+    grid-template-columns: 1fr 1fr;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 55vh;
+}
+
+
+.vCol{
+    display: flex;
+    flex-direction: column-reverse;
+    text-align: center;
+    height: 100%;
+    
+}
+
+.vColP{
+    height: 100%;
+}
+
+.bord{
+    border-right: 1px solid gray;
+}
+
+.vImg img{
+
+    width: 15px;
+    height: 15px;
+    cursor:move;
+
+}
+
+
+/* Progress Bar */
+
+.progress{
+	height: 95%;
+    width: 90%;
+	margin: 0 auto;
+    display: flex;
+    flex-direction: column-reverse;
+    line-height: 0;
+    border-radius: 0.25rem;
+}
+
+#yBar .progress-bar{
+	background-color: green;
+}
+
+#nBar .progress-bar{
+	background-color: red;
+}
+
+
+
+
+
+/* Light up area */
+
+.lightCol{
+    background-color: aqua;
+}
+
+
+/* PROVA */
+
+
