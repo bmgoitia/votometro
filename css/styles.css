@@ -76,7 +76,7 @@ body{
 }
 
 #vSent p{
-    margin: 10px 0;
+    margin: 5px 0;
     font-weight: 900;
     
 }
@@ -157,6 +157,7 @@ body{
     }
 
     #vSent p{ 
+	 margin: 10px 0;
         font-size: 2rem;
         font-weight: 900;
         
