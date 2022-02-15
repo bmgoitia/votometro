@@ -132,7 +132,7 @@ let vData=[
 
 
 
-let movedP;  // element being moved (id)
+let movedP;  
 
 let yHeight = 0;
 let nHeight = 0;
@@ -172,7 +172,6 @@ function dragMoveListener (event) {
 
   
   var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx  // number of pixels the element is moving right (positive num) o left (neg num) from its original position
-  //  x = la posición en el eje x (o en su defecto, cero) MÁS los píxels de movimiento horizontal que haya hecho el usuario al mover el elemento (esto es lo que indica event.dx)
  
  
   var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy 
@@ -222,12 +221,6 @@ function elmIn(event){
   console.log(event)
 
     dropZoneV = event.target;
-    
-    
-    
-    // console.log(event.relatedTarget.id
-    //     + ' was dropped into '
-    //     + event.target.id);
 
     $(dropZoneV).css("background-color", "rgb(157 149 149 / 30%)"); 
 
