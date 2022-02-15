@@ -148,26 +148,18 @@ let partNum;
 
 window.onload = function() {
 
- 
- 
- };
 
-
-
-// PROVA
-
-
-
-// target elements with the "draggable" class
 interact('.drag')
   .draggable({
     listeners: {
-      start: mStart,  // función que se activa cuando arranca el movimiento
+      start: mStart,  
       move: dragMoveListener,
-      //end: acaba, ---> función que se activa cuando arranca el movimiento (cuando sueltas ele elemento)
+      end: mEnd, 
       
     }
   })
+
+  
 
 function mStart(event){
   movedP = event.target.id // id of element being moved
@@ -183,7 +175,7 @@ function dragMoveListener (event) {
   //  x = la posición en el eje x (o en su defecto, cero) MÁS los píxels de movimiento horizontal que haya hecho el usuario al mover el elemento (esto es lo que indica event.dx)
  
  
-  var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy  // same for height
+  var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy 
 
   // translate the element
   target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
@@ -193,12 +185,25 @@ function dragMoveListener (event) {
   target.setAttribute('data-y', y)
 }
 
+function mEnd(event){
+
+  let target = event.target;
+
+  // return element to its original position
+  if (!event.dropzone){  //if element is not on dropzone area
+    console.log("lo has soltado fuerza de la dropzone")
+    
+    target.style.transform = 'translate(0px, 0px)';
+
+  // update the position attributes
+    target.setAttribute('data-x', 0)
+    target.setAttribute('data-y', 0)
+    
+  }
+}
 
 
 
-
-
-// this function is used later in the resizing and gesture demos
 window.dragMoveListener = dragMoveListener
 
 
@@ -206,16 +211,18 @@ window.dragMoveListener = dragMoveListener
 
 interact('.vCol').dropzone({
     accept: '.drag',
-    ondragenter: adins,
+    ondragenter: elmIn,
     ondrop: activateBar,
-    ondragleave: afora,
+    ondragleave: elmOut,
 
     
   });
 
-function adins(event){
+function elmIn(event){
+  console.log(event)
 
     dropZoneV = event.target;
+    
     
     
     // console.log(event.relatedTarget.id
@@ -265,7 +272,7 @@ function activateBar(event){
 }
 
 
-function afora(event){
+function elmOut(event){
 
   let partPerc = vData.find(x => x.id === movedP).perc;
   
@@ -305,4 +312,9 @@ function afora(event){
 
   
 }
+
+
+};
+
+
 
