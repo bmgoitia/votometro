@@ -130,11 +130,12 @@ body{
 }
 
 #yBar .progress-bar{
-	background-color: green;
+	
+    background-color: #329632;
 }
 
 #nBar .progress-bar{
-	background-color: red;
+	background-color: #ba0707;
 }
 
 
