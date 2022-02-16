@@ -1,5 +1,5 @@
 
-let vData=[
+const vData=[
   {
     "id": "PSOE",
     "num": "120",
@@ -132,18 +132,16 @@ let vData=[
 
 
 
-let movedP;  
+let movedP;  // element being moved (id)
+
+let yCol = [];
+let nCol = [];
 
 let yHeight = 0;
 let nHeight = 0;
 
 let yNum = 0;
 let nNum = 0;
-
-let partPerc;
-  
-let partNum;
-
 
 
 window.onload = function() {
@@ -163,7 +161,6 @@ interact('.drag')
 
 function mStart(event){
   movedP = event.target.id // id of element being moved
-  console.log(movedP)
 }
 
 function dragMoveListener (event) {
@@ -172,6 +169,7 @@ function dragMoveListener (event) {
 
   
   var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx  // number of pixels the element is moving right (positive num) o left (neg num) from its original position
+  //  x = la posición en el eje x (o en su defecto, cero) MÁS los píxels de movimiento horizontal que haya hecho el usuario al mover el elemento (esto es lo que indica event.dx)
  
  
   var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy 
@@ -190,7 +188,6 @@ function mEnd(event){
 
   // return element to its original position
   if (!event.dropzone){  //if element is not on dropzone area
-    console.log("lo has soltado fuerza de la dropzone")
     
     target.style.transform = 'translate(0px, 0px)';
 
@@ -211,103 +208,163 @@ window.dragMoveListener = dragMoveListener
 interact('.vCol').dropzone({
     accept: '.drag',
     ondragenter: elmIn,
-    ondrop: activateBar,
+    ondrop: elDropped,
     ondragleave: elmOut,
 
     
   });
 
 function elmIn(event){
-  console.log(event)
 
     dropZoneV = event.target;
 
     $(dropZoneV).css("background-color", "rgb(157 149 149 / 30%)"); 
-
     
 }
 
-function activateBar(event){
 
-  // movedP is the id of the element being moved
-  
-  let partPerc = vData.find(x => x.id === movedP).perc;
-  
-  let partNum = parseInt(vData.find(x => x.id === movedP).num);
-  
+function elDropped(event){
 
-  let usedP = vData.find(x => x.id === movedP);  // check if element has been moved to any column (true / false)
-  usedP.inArea = true;
+    let pId = event.relatedTarget.id
 
-  
+    let colName = event.target.id
 
-  if(event.target.id == "aye"){
-    yHeight+=partPerc;
-    $("#yBar .progress-bar").animate({
-      height: `${yHeight}%`
-    }, 2500);
 
-    yNum+=partNum;
-    $('#ayeNum').text(yNum);
+    let usedP = vData.find(x => x.id === movedP);  // check if element has been moved to any column (true / false)
+
+    if(!usedP.inArea){
+      usedP.inArea = true;
     
-  } else if(event.target.id == "nay"){
-    nHeight+=partPerc;
-    $("#nBar .progress-bar").animate({
-      height: `${nHeight}%`
-    }, 2500);
-
-    nNum+=partNum;
-
-    $('#nayNum').text(nNum);
-  }
-
+      addV(pId,colName);
+  } 
   
 }
+
 
 
 function elmOut(event){
 
-  let partPerc = vData.find(x => x.id === movedP).perc;
-  
-  let partNum = parseInt(vData.find(x => x.id === movedP).num);
+  let pId = event.relatedTarget.id  //ID of party
 
-  console.log(yHeight)
+  let colName = event.target.id  // ID of dropzone
 
-  if(vData.find(x => x.id === movedP).inArea == true){
-    console.log("ha estado en otra columna")
-    if(event.target.id == "aye"){
-      console.log("viene del sí")
+  let usedP = vData.find(x => x.id === movedP); 
+
+    if(usedP.inArea){
+      usedP.inArea = false;
       
-      yHeight-=partPerc;
-      
-      $("#yBar .progress-bar").animate({
-        height: `${yHeight}%`
-      }, 2500);
-
-      yNum-=partNum;
-    $('#ayeNum').text(yNum);
-} else if(event.target.id == "nay"){
-      console.log("viene del no")
-      
-
-      nHeight-=partPerc;
-      console.log(nHeight)
-      
-      $("#nBar .progress-bar").animate({
-        height: `${nHeight}%` || 0
-      }, 2500);
-
-      nNum-=partNum;
-
-    $('#nayNum').text(nNum);
-    }
   }
 
+    subsV(pId,colName);   
   
 }
 
 
+
+// ADD - SUBTRACT
+
+function addV(id,col){
+
+  let partPerc = vData.find(x => x.id === id).perc;
+  
+  let partNum = parseInt(vData.find(x => x.id === id).num);
+
+  if(col == "aye"){
+    yCol.push(id);
+    calcHeightVotes(col);
+  }else if(col == "nay"){
+    nCol.push(id);
+    calcHeightVotes(col);
+  }
+
+
+}
+
+
+
+function subsV(id,col){
+  
+  if(yCol.length > 0 && col == "aye"){
+    let indexY = yCol.indexOf(id);
+    if (indexY > -1) {
+      yCol.splice(indexY, 1); 
+      calcHeightVotes(col);
+    }   
+  }else if(nCol.length > 0 && col == "nay"){
+    let indexN = nCol.indexOf(id);
+    if (indexN > -1) {
+      nCol.splice(indexN, 1); 
+      calcHeightVotes(col);
+    }  
+    
+  }
+
+
+}
+
+
+
+
+/* CALCULATE BAR HEIGHT AND VOTES  */
+
+function calcHeightVotes(col){
+
+  let sumPercY = 0;
+  let sumPercN = 0;
+
+  let sumNumY = 0;
+  let sumNumN = 0;
+
+
+  for(var i = 0; i<yCol.length; i++){
+    sumPercY+= vData.find(x => x.id === yCol[i]).perc;
+  }
+
+  $("#yBar .progress-bar").animate({
+          height: `${sumPercY}%`
+         }, 1000);
+
+
+  for(var i = 0; i<nCol.length; i++){
+    sumPercN+= vData.find(x => x.id === nCol[i]).perc;
+  }
+      
+  $("#nBar .progress-bar").animate({
+          height: `${sumPercN}%`
+      }, 1000);
+
+
+
+  // NUM OF VOTES
+
+  for(var i = 0; i<yCol.length; i++){
+    sumNumY+= parseInt(vData.find(x => x.id === yCol[i]).num);
+  }
+
+  $('#ayeNum').text(sumNumY)
+
+  for(var i = 0; i<nCol.length; i++){
+    sumNumN+= parseInt(vData.find(x => x.id === nCol[i]).num);
+  }
+
+  $('#nayNum').text(sumNumN);
+
+  
+ 
+   
+
+
+}
+
+
+
+
+
+
+
 };
+
+
 
 
 
